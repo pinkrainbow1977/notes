@@ -17,8 +17,8 @@ class NoteGrid extends Component {
   };
   componentDidUpdate = (prevProps, prevState) => {
     if (
-      this.props.notes.length != prevProps.notes.length ||
-      this.state.value.length != prevState.value.length
+      this.props.notes.length !== prevProps.notes.length ||
+      this.state.value.length !== prevState.value.length
     ) {
       this.msnry.reloadItems();
       this.msnry.layout();
