@@ -1,54 +1,54 @@
-import React, { Component } from "react";
-import "@reshuffle/code-transform/macro";
+import React, { Component } from 'react';
+import '@reshuffle/code-transform/macro';
 
 import {
   addNotesToBackend,
   getNotes,
-  removeNote
-} from "../../../backend/notes";
+  removeNote,
+} from '../../../backend/notes';
 
-import NoteEditor from "../NoteEditor/NoteEditor";
-import NoteGrid from "../NoteGrid/NoteGrid";
+import NoteEditor from '../NoteEditor/NoteEditor';
+import NoteGrid from '../NoteGrid/NoteGrid';
 
 class NoteApp extends Component {
   state = {
-    notes: []
+    notes: [],
   };
   componentDidMount = async () => {
-    getNotes().then(notes => {
+    getNotes().then((notes) => {
       if (notes) {
         this.setState({
-          notes: [...notes]
+          notes: [...notes],
         });
       }
     });
   };
 
-  handleDeleteNote = note => {
+  handleDeleteNote = (note) => {
     let noteId = note.id;
-    removeNote(note.id).then(res => console.log(res));
+    removeNote(note.id).then((res) => console.log(res));
     let newNotes = this.state.notes.filter(function(note) {
-      return note.id != noteId;
+      return note.id !== noteId;
     });
     this.setState({
-      notes: newNotes
+      notes: newNotes,
     });
   };
-  handleNoteAdd = async newNote => {
+  handleNoteAdd = async (newNote) => {
     this.setState(
       {
-        notes: [newNote, ...this.state.notes]
+        notes: [newNote, ...this.state.notes],
       },
-      () => addNotesToBackend(newNote)
+      () => addNotesToBackend(newNote),
     );
   };
   render() {
     return (
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <div className="notes-app">
