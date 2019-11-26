@@ -32,10 +32,13 @@ export async function addNotesToBackend(newNote) {
  */
 // @expose
 export async function getNotes() {
-  const notes = await get('Notes');
-  let result = [];
-  for (let note in notes) result.push(notes[note]);
-  return result.reverse();
+  const { id } = getCurrentUser(true);
+
+  let allNotes = await get('savedNotes');
+
+  if (allNotes[id]) {
+    return allNotes[id];
+  }
 }
 
 /**
