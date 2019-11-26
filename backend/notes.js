@@ -51,9 +51,13 @@ export async function getNotes() {
  */
 // @expose
 export async function removeNote(noteId) {
-  return update('Notes', savedNotes => {
-    let allNotes = { ...savedNotes };
-    delete allNotes[noteId];
+  const { id } = getCurrentUser(true);
+
+  return update('savedNotes', savedNotes => {
+    const allNotes = JSON.parse(JSON.stringify(savedNotes));
+
+    allNotes[id] = allNotes[id].filter(note => note.id !== noteId);
+
     return allNotes;
   });
 }
