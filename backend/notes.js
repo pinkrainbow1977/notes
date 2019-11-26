@@ -1,4 +1,5 @@
-import { update, get } from "@reshuffle/db";
+import { update, get } from '@reshuffle/db';
+import { getCurrentUser } from '@reshuffle/server-function';
 
 /**
  * From the frontend we pass a newNote object conaining the id, color
@@ -11,9 +12,17 @@ import { update, get } from "@reshuffle/db";
  */
 // @expose
 export async function addNotesToBackend(newNote) {
-  return update("Notes", savedNotes => {
-    const allNotes = { ...savedNotes };
-    allNotes[newNote.id] = newNote;
+  const { id } = getCurrentUser(true);
+
+  return update('savedNotes', (savedNotes = {}) => {
+    const allNotes = JSON.parse(JSON.stringify(savedNotes));
+
+    if (!allNotes[id]) {
+      allNotes[id] = [newNote];
+    } else {
+      allNotes[id].push(newNote);
+    }
+
     return allNotes;
   });
 }
@@ -23,7 +32,7 @@ export async function addNotesToBackend(newNote) {
  */
 // @expose
 export async function getNotes() {
-  const notes = await get("Notes");
+  const notes = await get('Notes');
   let result = [];
   for (let note in notes) result.push(notes[note]);
   return result.reverse();
@@ -39,7 +48,7 @@ export async function getNotes() {
  */
 // @expose
 export async function removeNote(noteId) {
-  return update("Notes", savedNotes => {
+  return update('Notes', savedNotes => {
     let allNotes = { ...savedNotes };
     delete allNotes[noteId];
     return allNotes;
