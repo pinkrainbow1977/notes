@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
 import '@reshuffle/code-transform/macro';
+import React, { Component } from 'react';
 import { AuthContext } from '@reshuffle/react-auth';
 import {
   addNotesToBackend,
   getNotes,
   removeNote,
 } from '../../../backend/notes';
-
+import Nav from '../NavBar/Nav';
 import NoteEditor from '../NoteEditor/NoteEditor';
 import NoteGrid from '../NoteGrid/NoteGrid';
 
@@ -15,6 +15,7 @@ class NoteApp extends Component {
   state = {
     notes: [],
   };
+
   componentDidMount = async () => {
     getNotes().then(notes => {
       if (notes) {
@@ -35,6 +36,7 @@ class NoteApp extends Component {
       notes: newNotes,
     });
   };
+
   handleNoteAdd = async newNote => {
     this.setState(
       {
@@ -43,15 +45,9 @@ class NoteApp extends Component {
       () => addNotesToBackend(newNote),
     );
   };
+
   render() {
-    const {
-      loading,
-      error,
-      authenticated,
-      profile,
-      getLoginURL,
-      getLogoutURL,
-    } = this.context;
+    const { loading, error, authenticated } = this.context;
 
     if (loading) {
       return (
@@ -77,28 +73,7 @@ class NoteApp extends Component {
         }}
       >
         <div className='notes-app'>
-          <nav className='nav-bar'>
-            <h2 className='app-header'>Notes App</h2>
-            <div>
-              {authenticated ? (
-                <>
-                  <img
-                    alt={profile.displayName}
-                    src={profile.picture}
-                    height={20}
-                  />
-                  <span>{profile.displayName}</span>
-                  <a className='nav-btns' href={getLogoutURL()}>
-                    Logout
-                  </a>
-                </>
-              ) : (
-                <a className='nav-btns' href={getLoginURL()}>
-                  Login
-                </a>
-              )}
-            </div>
-          </nav>
+          <Nav />
           {authenticated ? (
             <div>
               <NoteEditor onNoteAdd={this.handleNoteAdd} />
