@@ -32,6 +32,12 @@ export async function addNotesToBackend(newNote) {
  */
 // @expose
 export async function getNotes() {
+  const profile = getCurrentUser(false);
+
+  if (profile === undefined) {
+    return [];
+  }
+
   const { id } = getCurrentUser(true);
 
   let allNotes = await get('savedNotes');
